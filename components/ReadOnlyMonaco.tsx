@@ -5,17 +5,12 @@ import draculaTheme from "../constants/DraculaTheme";
 interface Props {
     language?: string;
     code: string;
-    setCode: (code: string) => void;
 }
 
-const SimpleMonacoEditor = ({ language = "javascript", code, setCode }: Props) => {
+const SimpleMonacoEditor = ({ language = "javascript", code }: Props) => {
 
     function setEditorTheme(monaco: any) {
         monaco.editor.defineTheme('dracula', draculaTheme);
-    }
-
-    function handleEditorChange(value: string | undefined) {
-        setCode(value || '');
     }
 
     return (
@@ -24,13 +19,14 @@ const SimpleMonacoEditor = ({ language = "javascript", code, setCode }: Props) =
             borderRadius: '1%',
             overflow: "hidden"
         }}>
+
             <Editor
-                height="658px"
+                height="500px"
                 defaultLanguage={language}
-                defaultValue={code}
                 beforeMount={setEditorTheme}
+                value={code}
                 theme="dracula"
-                onChange={handleEditorChange}
+                options={{ readOnly: true }}
             />
         </div>
     );

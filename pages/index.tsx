@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { useState } from 'react';
 import SimpleMonacoEditor from '../components/SimpleMonacoEditor';
+import ReadOnlyMonaco from '../components/ReadOnlyMonaco';
 
 const Home: NextPage = () => {
   const [code, setCode] = useState('');
@@ -24,6 +25,7 @@ const Home: NextPage = () => {
         <h1>Code Snippet Page</h1>
         <p>Enter your code snippet below:</p>
         <SimpleMonacoEditor code={code} setCode={setCode} />
+        {/* <ReadOnlyMonaco code={code} /> */}
         <button className={styles.submitBtn} onClick={handleSubmit}>Submit</button>
       </main>
     </div>
