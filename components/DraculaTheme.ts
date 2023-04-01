@@ -1,4 +1,4 @@
-{
+const draculaTheme = {
   "base": "vs-dark",
   "inherit": true,
   "rules": [
@@ -206,3 +206,5 @@
     "editor.selectionHighlightBorder": "#222218"
   }
 }
+
+export default draculaTheme;

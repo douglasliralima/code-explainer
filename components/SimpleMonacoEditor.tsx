@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Editor from "@monaco-editor/react";
-import draculaTheme from "./Dracula.json";
+import draculaTheme from "./DraculaTheme";
 
 interface Props {
     language?: string;
