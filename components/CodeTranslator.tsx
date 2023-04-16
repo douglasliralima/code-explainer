@@ -2,6 +2,7 @@ import styles from '../styles/CodeToEnglish.module.css'
 import React, { useCallback, useEffect, useState } from 'react';
 import Editor from "@monaco-editor/react";
 import draculaTheme from "../constants/DraculaTheme";
+import { getChatbotResponse } from '../service/ChatGptService';
 
 const CodeToEnglish = () => {
 
@@ -13,15 +14,14 @@ const CodeToEnglish = () => {
 
     const [translatedCode, setTranslatedCode] = useState('');
 
-    const handleSubmit = useCallback(() => {
-        console.log(code);
-        // Do something with the submitted code snippet
-    }, [code])
+    const handleSubmit = useCallback(async () => {
+        const translation = await getChatbotResponse(`Explain the code below using ${idiom} language:\n\n${code}`);
+        setTranslatedCode(translation);
+    }, [code, idiom])
 
     useEffect(() => {
         if (code !== '') {
             setTranslatedCode("Translating...");
-            // after 5 seconds, submit the code snippet
             const timeout = setTimeout(() => {
                 handleSubmit();
             }, 3000);
@@ -73,10 +73,11 @@ const CodeToEnglish = () => {
             <div className={styles.outputBox}>
                 <label className={styles.translateLabel}>Translate to:</label>
                 <select value={idiom} onChange={handleIdiomChange} className={styles.translateSelect}>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="de">German</option>
-                    <option value="pt-br">Portuguese</option>
+                    <option value="english">English</option>
+                    <option value="espanish">Spanish</option>
+                    <option value="german">German</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="brazilian portuguese">Brazilian portuguese</option>
                 </select>
                 <textarea disabled name="target-text" id="target-text" placeholder="Translation" value={translatedCode}></textarea>
             </div>
