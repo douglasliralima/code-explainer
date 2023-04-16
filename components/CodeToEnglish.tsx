@@ -1,5 +1,5 @@
 import styles from '../styles/CodeToEnglish.module.css'
-import React, { useState } from 'react';
+import React from 'react';
 import Editor from "@monaco-editor/react";
 import draculaTheme from "../constants/DraculaTheme";
 

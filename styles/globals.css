@@ -7,7 +7,7 @@ body {
   color: #000;
   background-color: #fff;
   height: 100%;
-  background: linear-gradient(to bottom, #c471f5 0%, rgb(0, 255, 160) 100.2%);
+  background: linear-gradient(to bottom, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%);
 }
 
 a {
