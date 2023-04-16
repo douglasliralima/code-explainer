@@ -1,17 +1,25 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { useState } from 'react';
-import SimpleMonacoEditor from '../components/SimpleMonacoEditor';
-import ReadOnlyMonaco from '../components/ReadOnlyMonaco';
+import { useCallback, useEffect, useState } from 'react';
+import CodeToEnglish from '../components/CodeToEnglish';
 
 const Home: NextPage = () => {
   const [code, setCode] = useState('');
 
-  function handleSubmit() {
+  const handleSubmit = useCallback(() => {
     console.log(code);
     // Do something with the submitted code snippet
-  }
+  }, [code])
+
+  useEffect(() => {
+    // after 5 seconds, submit the code snippet
+    const timeout = setTimeout(() => {
+      handleSubmit();
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [code, handleSubmit]);
 
   return (
     <div className={styles.CodeMirror}>
@@ -21,13 +29,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/chatgpt-icon.svg" />
       </Head>
 
-      <main className={styles.main}>
-        <h1>Code Snippet Page</h1>
-        <p>Enter your code snippet below:</p>
-        <SimpleMonacoEditor code={code} setCode={setCode} />
-        {/* <ReadOnlyMonaco code={code} /> */}
-        <button className={styles.submitBtn} onClick={handleSubmit}>Submit</button>
-      </main>
+      <div>
+
+        <CodeToEnglish code={code} setCode={setCode} />
+      </div>
     </div>
   )
 }
