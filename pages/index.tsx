@@ -1,25 +1,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { useCallback, useEffect, useState } from 'react';
-import CodeToEnglish from '../components/CodeToEnglish';
+import CodeTranslator from '../components/CodeTranslator';
 
 const Home: NextPage = () => {
-  const [code, setCode] = useState('');
-
-  const handleSubmit = useCallback(() => {
-    console.log(code);
-    // Do something with the submitted code snippet
-  }, [code])
-
-  useEffect(() => {
-    // after 5 seconds, submit the code snippet
-    const timeout = setTimeout(() => {
-      handleSubmit();
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, [code, handleSubmit]);
 
   return (
     <div className={styles.CodeMirror}>
@@ -30,8 +14,7 @@ const Home: NextPage = () => {
       </Head>
 
       <div>
-
-        <CodeToEnglish code={code} setCode={setCode} />
+        <CodeTranslator />
       </div>
     </div>
   )
