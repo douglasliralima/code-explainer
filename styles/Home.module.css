@@ -1,32 +1,14 @@
-.main {
-  background: linear-gradient(to top, #c471f5 0%, #fa71cd 100%);
-}
-
 .CodeMirror {
   height: auto;
   font-size: 14px;
   line-height: 1.4;
 }
 
-.code {
-  width: 100%;
-  height: 400px;
-  margin-bottom: 20px;
+.headerCard {
+  text-align: center;
+  margin: 50px;
   padding: 10px;
+  color: #202124;
   background-color: #fff;
-  color: #000;
-  border: 2px solid var(--main-color);
-}
-
-.submitBtn {
-  background-color: var(--main-color);
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.submitBtn:hover {
-  opacity: 0.9;
+  border-radius: 8px;
 }

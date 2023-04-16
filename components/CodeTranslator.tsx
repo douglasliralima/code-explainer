@@ -1,4 +1,4 @@
-import styles from '../styles/CodeToEnglish.module.css'
+import styles from '../styles/CodeTranslator.module.css'
 import React, { useCallback, useEffect, useState } from 'react';
 import Editor from "@monaco-editor/react";
 import draculaTheme from "../constants/DraculaTheme";
@@ -53,7 +53,7 @@ const CodeToEnglish = () => {
     return (
         <div className={styles.translateToEnglish}>
             <div className={styles.monacoEditor}>
-                <label className={styles.translateLabel}>Translate to:</label>
+                <label className={styles.translateLabel}>Translate from:</label>
                 <select value={language} onChange={handleLanguageChange} className={styles.translateSelect}>
                     <option value="javascript">JavaScript</option>
                     <option value="python">Python</option>
@@ -71,13 +71,18 @@ const CodeToEnglish = () => {
             </div>
 
             <div className={styles.outputBox}>
-                <label className={styles.translateLabel}>Translate to:</label>
+                <label className={styles.translateLabel}>To:</label>
                 <select value={idiom} onChange={handleIdiomChange} className={styles.translateSelect}>
                     <option value="english">English</option>
-                    <option value="espanish">Spanish</option>
-                    <option value="german">German</option>
-                    <option value="chinese">Chinese</option>
+                    <option value="mandarin">Mandarin</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                    <option value="arabic">Arabic</option>
+                    <option value="bengali">Bengali</option>
+                    <option value="russian">Russian</option>
                     <option value="brazilian portuguese">Brazilian portuguese</option>
+                    <option value="indonesian">Indonesian</option>
                 </select>
                 <textarea disabled name="target-text" id="target-text" placeholder="Translation" value={translatedCode}></textarea>
             </div>
