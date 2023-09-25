@@ -1,36 +1,40 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/CodeTranslator.module.css'
-import React, { useCallback, useEffect, useState } from 'react';
 import Editor from "@monaco-editor/react";
 import draculaTheme from "../constants/DraculaTheme";
-import { getChatbotResponse } from '../service/ChatGptService';
+import { useCompletion } from 'ai/react';
+
 
 const CodeToEnglish = () => {
-
+      
     const [language, setLanguage] = useState('javascript');
-
-    const [idiom, setIdiom] = useState('en');
 
     const [code, setCode] = useState('');
 
-    const [translatedCode, setTranslatedCode] = useState('');
+    const [idiom, setIdiom] = useState('en');
 
-    const handleSubmit = useCallback(async () => {
-        const translation = await getChatbotResponse(`Explain the code below using ${idiom} language:\n\n${code}`);
-        setTranslatedCode(translation);
-    }, [code, idiom])
+
+    const { completion, isLoading, setCompletion, complete } = useCompletion({
+        api: 'api/translate',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
 
     useEffect(() => {
         if (code !== '') {
-            setTranslatedCode("Translating...");
             const timeout = setTimeout(() => {
-                handleSubmit();
-            }, 3000);
+                complete(`Explain this code using ${idiom} language:\n\n${code}`);
+            }, 2000);
 
             return () => clearTimeout(timeout);
         } else {
-            setTranslatedCode('');
+            setCompletion('');
         }
-    }, [code, handleSubmit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [code, complete]);
 
     function setEditorTheme(monaco: any) {
         monaco.editor.defineTheme('dracula', draculaTheme);
@@ -42,19 +46,24 @@ const CodeToEnglish = () => {
 
     function handleLanguageChange(event: React.ChangeEvent<HTMLSelectElement>) {
         setCode('');
+        setCompletion('');
         setLanguage(event.target.value);
     }
 
     function handleIdiomChange(event: React.ChangeEvent<HTMLSelectElement>) {
-        setTranslatedCode('');
         setIdiom(event.target.value);
+        complete(`Explain this code using ${event.target.value} language:\n\n${code}`);
     }
 
     return (
         <div className={styles.translateToEnglish}>
             <div className={styles.monacoEditor}>
                 <label className={styles.translateLabel}>Translate from:</label>
-                <select value={language} onChange={handleLanguageChange} className={styles.translateSelect}>
+                <select 
+                    value={language} 
+                    onChange={handleLanguageChange} 
+                    className={styles.translateSelect}
+                >
                     <option value="javascript">JavaScript</option>
                     <option value="python">Python</option>
                     <option value="java">Java</option>
@@ -72,7 +81,11 @@ const CodeToEnglish = () => {
 
             <div className={styles.outputBox}>
                 <label className={styles.translateLabel}>To:</label>
-                <select value={idiom} onChange={handleIdiomChange} className={styles.translateSelect}>
+                <select 
+                    value={idiom} 
+                    onChange={handleIdiomChange} 
+                    className={styles.translateSelect}
+                >
                     <option value="english">English</option>
                     <option value="mandarin">Mandarin</option>
                     <option value="hindi">Hindi</option>
@@ -84,7 +97,13 @@ const CodeToEnglish = () => {
                     <option value="brazilian portuguese">Brazilian portuguese</option>
                     <option value="indonesian">Indonesian</option>
                 </select>
-                <textarea disabled name="target-text" id="target-text" placeholder="Translation" value={translatedCode}></textarea>
+                <textarea
+                    name="target-text" 
+                    id="target-text" 
+                    placeholder={isLoading ? 'Translating...' : "Translation" } 
+                    value={completion}
+                    readOnly
+                />
             </div>
         </div >
     );

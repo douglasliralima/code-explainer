@@ -1,22 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
+import { OpenAIStream, streamToResponse } from 'ai';
 
-const configuration = new Configuration({
+
+const openai = new OpenAI({
     apiKey: process.env.REACT_APP_CHATGPT_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 export default async function translate(req: NextApiRequest, res: NextApiResponse) {
-    if (!configuration.apiKey) {
-        res.status(500).json({
-            error: {
-                message: "OpenAI API key not configured.",
-            }
-        });
-        return;
-    }
 
-    const prompt = `${req.query.prompt}`;
+    const prompt = `${req.body.prompt}`;
     if (prompt.trim().length === 0) {
         res.status(400).json({
             error: {
@@ -27,16 +20,26 @@ export default async function translate(req: NextApiRequest, res: NextApiRespons
     }
 
     try {
-        const completion = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: prompt,
+        const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                { role: 'user', content: prompt }
+              ],
             max_tokens: 150,
             temperature: 0,
-            top_p: 1
+            top_p: 1,
+            stream: true,
         });
-        res.status(200).json({ result: completion.data.choices[0].text?.replace('\n', '') });
+
+        const stream = OpenAIStream(response);
+        streamToResponse(stream, res, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            }
+          });
+
     } catch (error: any) {
-        // Consider adjusting the error handling logic for your use case
         if (error.response) {
             console.error(error.response.status, error.response.data);
             res.status(error.response.status).json(error.response.data);
